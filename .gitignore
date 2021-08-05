@@ -1,0 +1,45 @@
+HELP.md
+!**/src/main/**
+!**/src/test/**
+
+*.sonarj
+*.sw*
+.DS_Store
+target/
+!.mvn/wrapper/maven-wrapper.jar
+/bin/*.class
+/bin/classpathfile
+/build
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+app.jar
+
+**/*.log
+local-data
+/src/test/resources/testdokumente/~$hlende_Unterlagen.docx
+/src/main/resources/antragexport/.~lock.Antragsdokument.odt#
