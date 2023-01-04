@@ -1,6 +1,8 @@
 package com.opitzconsulting.fluentdomainfactorydemo.domain;
 
 import net.karneim.pojobuilder.GeneratePojoBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.time.LocalDate;
 
@@ -21,6 +23,7 @@ public class Studium {
     public void setImmatrikulationsnummer(String immatrikulationsnummer) {
         this.immatrikulationsnummer = immatrikulationsnummer;
     }
+
     public Studiengang getStudiengang() {
         return studiengang;
     }
@@ -59,5 +62,17 @@ public class Studium {
 
     public void setExmatrikulationsDatum(LocalDate exmatrikulationsDatum) {
         this.exmatrikulationsDatum = exmatrikulationsDatum;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("studiengang", studiengang)
+                .append("student", student)
+                .append("studiumStatus", studiumStatus)
+                .append("immatrikulationsDatum", immatrikulationsDatum)
+                .append("exmatrikulationsDatum", exmatrikulationsDatum)
+                .append("immatrikulationsnummer", immatrikulationsnummer)
+                .toString();
     }
 }

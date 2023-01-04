@@ -1,6 +1,7 @@
 package com.opitzconsulting.fluentdomainfactorydemo.factory;
 
 import com.opitzconsulting.fluentdomainfactorydemo.domain.*;
+import com.opitzconsulting.fluentdomainfactorydemo.factory.context.*;
 import com.opitzconsulting.fluentdomainfactorydemo.factory.state.*;
 
 import java.time.LocalDate;
@@ -15,20 +16,26 @@ import static com.opitzconsulting.fluentdomainfactorydemo.factory.NoOperationCon
 
 public class TestdataFactory {
 
-
     UniversitaetState universitaetState = new UniversitaetState();
     FakultaetState fakultaetState = new FakultaetState();
     StudiengangState studiengangState = new StudiengangState();
     StudentState studentState = new StudentState();
     StudiumState studiumStage = new StudiumState();
 
-    public Universitaet addUniversitaet() {
+    // Universität
+    private UniversitaetContext getCurrentUniversitaet() {
+        return universitaetState.getCurrentOrCreate(this::addUniversitaet);
+    }
+
+    public UniversitaetContext addUniversitaet() {
         return addUniversitaet(noop());
     }
-    public Universitaet addUniversitaet(Consumer<UniversitaetBuilder> configurator) {
+
+    public UniversitaetContext addUniversitaet(Consumer<UniversitaetBuilder> configurator) {
         UniversitaetBuilder defaultBuilder = defaultUniversitaetBuilder();
         configurator.accept(defaultBuilder);
-        return universitaetState.addEntry(defaultBuilder.build());
+        UniversitaetContext universitaetContext = new UniversitaetContext(this, defaultBuilder.build());
+        return universitaetState.addContext(universitaetContext);
     }
 
     private UniversitaetBuilder defaultUniversitaetBuilder() {
@@ -36,88 +43,112 @@ public class TestdataFactory {
                 .withName("Universität " + universitaetState.getNextNumber());
     }
 
-    public Fakultaet addFakultaet() {
+    //
+    // Fakultät
+    //
+    private FakultaetContext getCurrentFakultaet() {
+        return fakultaetState.getCurrentOrCreate(this::addFakultaet);
+    }
+
+    public FakultaetContext addFakultaet() {
         return addFakultaet(noop());
     }
-    public Fakultaet addFakultaet(Consumer<FakultaetBuilder> configurator) {
-        FakultaetBuilder defaultBuilder = defaultFakultaetBuilder(getCurrentUniversitaet());
+
+    public FakultaetContext addFakultaet(Consumer<FakultaetBuilder> configurator) {
+        FakultaetBuilder defaultBuilder = defaultFakultaetBuilder();
         configurator.accept(defaultBuilder);
-        return fakultaetState.addEntry(defaultBuilder.build());
-    }
 
-    private FakultaetBuilder defaultFakultaetBuilder(Universitaet uni) {
-        return fakultaetBuilder().withUniversitaet(uni)
-                .withName("Fakultät" + fakultaetState.getNextNumber());
-    }
+        Fakultaet fakultaet = defaultBuilder.build();
 
-    private Universitaet getCurrentUniversitaet() {
-        return universitaetState.getCurrentOrCreate(
-                           () -> addUniversitaet());
-    }
-
-
-
-    private Fakultaet getCurrentFakultaet() {
-        return fakultaetState.getCurrentOrCreate(
-                           () -> initDefaultFakultaet());
-    }
-
-    private Fakultaet initDefaultFakultaet() {
-        Universitaet universitaet = getCurrentUniversitaet();
-        Fakultaet fakultaet = fakultaetBuilder().withName("Fakultät " + fakultaetState.getNextNumber())
-                .withUniversitaet(universitaet)
-                .build();
+        UniversitaetContext universitaetContext =
+                universitaetState.findContext(fakultaet.getUniversitaet())
+                        .orElseGet(this::getCurrentUniversitaet);
+        Universitaet universitaet = universitaetContext.getEntity();
         universitaet.addFakultaet(fakultaet);
-        return fakultaet;
+        fakultaet.setUniversitaet(universitaet);
+        return new FakultaetContext(this, universitaetContext, fakultaet);
+    }
+
+    public FakultaetBuilder defaultFakultaetBuilder() {
+        return fakultaetBuilder()
+                .withName("Fakultät " + fakultaetState.getNextNumber());
     }
 
 
-    public Studiengang addStudiengang() {
+    //
+    // Studiengang
+    //
+    public StudiengangContext addStudiengang() {
         return addStudiengang(noop());
     }
-    public Studiengang addStudiengang(Consumer<StudiengangBuilder> StudiengangConfigurator) {
+
+    public StudiengangContext addStudiengang(Consumer<StudiengangBuilder> StudiengangConfigurator) {
         StudiengangBuilder defaultBuilder = defaultStudiengangBuilder();
         StudiengangConfigurator.accept(defaultBuilder);
-        Studiengang Studiengang = defaultBuilder.build();
-        studiengangState.addEntry(Studiengang);
-        return Studiengang;
+        Studiengang studiengang = defaultBuilder.build();
+
+        FakultaetContext fakultaetContext
+                = fakultaetState.findContext(studiengang.getFakultaet())
+                .orElseGet(this::getCurrentFakultaet);
+        studiengang.setFakultaet(fakultaetContext.getEntity());
+        return new StudiengangContext(this, fakultaetContext, studiengang);
     }
 
-    private StudiengangBuilder defaultStudiengangBuilder() {
+    public StudiengangBuilder defaultStudiengangBuilder() {
         Integer studiengangNumber = studiengangState.getNextNumber();
         return studiengangBuilder()
-                .withBezeichnung("Studiengang " + studiengangNumber)
-                .withFakultaet(getCurrentFakultaet());
+                .withBezeichnung("Studiengang " + studiengangNumber);
     }
 
-    private Studiengang getCurrentStudiengang() {
-        return studiengangState.getCurrentOrCreate(
-                           () -> addStudiengang());
+    private StudiengangContext getCurrentStudiengang() {
+        return studiengangState.getCurrentOrCreate(this::addStudiengang);
     }
 
-    private Studiengang initDefaultStudiengang() {
-        Fakultaet fakultaet = getCurrentFakultaet();
-        Studiengang studiengang = studiengangBuilder()
-                .withBezeichnung("Studiengang " + studiengangState.getNextNumber())
-                .withFakultaet(fakultaet)
-                .build();
-        fakultaet.addStudiengang(studiengang);
-        return studiengang;
+    //
+    // Studium
+    //
+    public StudiumContext addStudium() {
+        return addStudium(noop());
     }
 
-    private Student getCurrentStudent() {
-        return  studentState.getCurrentOrCreate(() -> addStudent());
+    public StudiumContext addStudium(Consumer<StudiumBuilder> studiumConfigurator) {
+        StudiumBuilder defaultBuilder = defaultStudiumBuilder();
+
+        studiumConfigurator.accept(defaultBuilder);
+
+        Studium studium = defaultBuilder.build();
+        StudiengangContext studiengangContext
+                = studiengangState.findContext(studium.getStudiengang())
+                .orElseGet(this::getCurrentStudiengang);
+
+        if (studium.getStudent() == null) {
+            studium.setStudent(getCurrentStudent().getEntity());
+        }
+
+        studium.setStudiengang(studiengangContext.getEntity());
+        return new StudiumContext(this, studiengangContext, studium);
     }
 
-    public Student addStudent() {
+    public StudiumBuilder defaultStudiumBuilder() {
+        return studiumBuilder()
+                .withImmatrikulationsDatum(LocalDate.now())
+                .withStudiumStatus(StudiumStatus.Immatrikuliert);
+    }
+
+    //
+    //Student
+    //
+
+    public StudentContext addStudent() {
         return addStudent(noop());
     }
-    public Student addStudent(Consumer<StudentBuilder> studentConfigurator) {
+
+    public StudentContext addStudent(Consumer<StudentBuilder> studentConfigurator) {
         StudentBuilder defaultBuilder = defaultStudentBuilder();
         studentConfigurator.accept(defaultBuilder);
         Student student = defaultBuilder.build();
-        studentState.addEntry(student);
-        return student;
+
+        return new StudentContext(this, student);
     }
 
     private StudentBuilder defaultStudentBuilder() {
@@ -128,29 +159,27 @@ public class TestdataFactory {
                 .withGeburtstag(LocalDate.now().minusYears(19));
     }
 
-
-    public Studium addStudium() {
-        return addStudium(noop());
-    }
-    public Studium addStudium(Consumer<StudiumBuilder> studiumConfigurator) {
-        Student student = getCurrentStudent();
-        Studiengang studiengang = getCurrentStudiengang();
-        Studium studium = createStudium(student,studiengang,studiumConfigurator);
-        studiumStage.addEntry(studium);
-        return studium;
+    private StudentContext getCurrentStudent() {
+        return studentState.getCurrentOrCreate(this::addStudent);
     }
 
-    private static Studium createStudium(Student student,
-                                        Studiengang studiengang,
-                                        Consumer<StudiumBuilder> studiumConfigurator) {
-        StudiumBuilder defaultStudium = createDefaultStudium(student, studiengang);
-        studiumConfigurator.accept(defaultStudium);
-        return defaultStudium.build();
+    public UniversitaetState getUniversitaetState() {
+        return universitaetState;
     }
-    private static StudiumBuilder createDefaultStudium(Student student, Studiengang studiengang) {
-        return studiumBuilder().withStudent(student)
-                .withStudiengang(studiengang)
-                .withImmatrikulationsDatum(LocalDate.now())
-                .withStudiumStatus(StudiumStatus.Immatrikuliert);
+
+    public FakultaetState getFakultaetState() {
+        return fakultaetState;
+    }
+
+    public StudiengangState getStudiengangState() {
+        return studiengangState;
+    }
+
+    public StudentState getStudentState() {
+        return studentState;
+    }
+
+    public StudiumState getStudiumStage() {
+        return studiumStage;
     }
 }

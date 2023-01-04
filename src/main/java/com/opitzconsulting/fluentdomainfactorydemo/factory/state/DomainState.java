@@ -1,45 +1,70 @@
 package com.opitzconsulting.fluentdomainfactorydemo.factory.state;
 
+import com.opitzconsulting.fluentdomainfactorydemo.factory.context.AbstractContext;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
-public abstract class DomainState<T> {
+public abstract class DomainState<C extends AbstractContext<E, ?>, E> {
 
-    private T currentEntry;
-    private final List<T> allEntries = new ArrayList<>();
-    private AtomicInteger counter = new AtomicInteger(0);
+    private C currentContext;
+    private final List<C> allContexts = new ArrayList<>();
+    private final AtomicInteger counter = new AtomicInteger(0);
 
-    public T addEntry(T entry) {
-        allEntries.add(entry);
-        currentEntry = entry;
-        return entry;
+    public C addContext(C context) {
+        E entity = context.getEntity();
+        if (!existsContextWithEntity(entity)) {
+            allContexts.add(context);
+            currentContext = context;
+        }
+        return context;
     }
 
-    public T getCurrentEntry() {
-        return currentEntry;
+    public C getCurrentContext() {
+        return currentContext;
     }
 
-    public boolean hasElement() {
-        return currentEntry != null;
+    public boolean hasCurrentContext() {
+        return currentContext != null;
     }
 
     public Integer getNextNumber() {
         return counter.incrementAndGet();
     }
 
-    public List<T> getAllEntries() {
-        return allEntries;
+    public List<C> getAllContexts() {
+        return allContexts;
     }
 
-    public  T getCurrentOrCreate(Supplier<T> newValueSupplier) {
-        if (this.hasElement()) {
-            return this.getCurrentEntry();
+    public List<E> getAllEntities() {
+        return allContexts.stream().map(c -> c.getEntity()).toList();
+    }
+
+    public C getCurrentOrCreate(Supplier<C> newValueSupplier) {
+        if (this.hasCurrentContext()) {
+            return this.getCurrentContext();
         }
-        T newElement = newValueSupplier.get();
-        this.addEntry(newElement);
+        C newElement = newValueSupplier.get();
+
+        //if supplier already added the new element to this domainState object, we will not add it again
+        if (!this.hasCurrentContext()) {
+            this.addContext(newElement);
+        }
+
         return newElement;
     }
+
+    public boolean existsContextWithEntity(E entity) {
+        return findContext(entity).isPresent();
+    }
+
+    public Optional<C> findContext(E entity) {
+        return getAllContexts().stream().filter(c -> c.isEntityEquals(entity))
+                .findFirst();
+    }
+
 
 }

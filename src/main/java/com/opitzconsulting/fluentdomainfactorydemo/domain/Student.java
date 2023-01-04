@@ -1,6 +1,8 @@
 package com.opitzconsulting.fluentdomainfactorydemo.domain;
 
 import net.karneim.pojobuilder.GeneratePojoBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.time.LocalDate;
 
@@ -33,5 +35,14 @@ public class Student {
 
     public void setGeburtstag(LocalDate geburtstag) {
         this.geburtstag = geburtstag;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("vorname", vorname)
+                .append("name", name)
+                .append("geburtstag", geburtstag)
+                .toString();
     }
 }
