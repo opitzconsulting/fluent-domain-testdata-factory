@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.opitzconsulting.fluentdomainfactorydemo.domain.Fakultaet</OriginalElement>
+  <nodes>
+    <node x="-374.0" y="504.0936282842412">com.opitzconsulting.fluentdomainfactorydemo.domain.StudiumStatus</node>
+    <node x="-417.5" y="259.41222616551374">com.opitzconsulting.fluentdomainfactorydemo.domain.Studium</node>
+    <node x="-733.0381742347557" y="314.8837111546446">com.opitzconsulting.fluentdomainfactorydemo.domain.Studiengang</node>
+    <node x="-382.0" y="55.13497822931785">com.opitzconsulting.fluentdomainfactorydemo.domain.Student</node>
+    <node x="-776.0384494898371" y="112.35530661123343">com.opitzconsulting.fluentdomainfactorydemo.domain.Fakultaet</node>
+    <node x="-773.0387247449186" y="-94.85829747498366">com.opitzconsulting.fluentdomainfactorydemo.domain.Universitaet</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.opitzconsulting.fluentdomainfactorydemo.domain.Studium" target="com.opitzconsulting.fluentdomainfactorydemo.domain.Studiengang" relationship="TO_ONE">
+      <point x="-116.0" y="11.471484989130829" />
+      <point x="75.0" y="0.0" />
+    </edge>
+    <edge source="com.opitzconsulting.fluentdomainfactorydemo.domain.Studium" target="com.opitzconsulting.fluentdomainfactorydemo.domain.StudiumStatus" relationship="TO_ONE">
+      <point x="0.0" y="82.0" />
+      <point x="0.0" y="-38.00000000000006" />
+    </edge>
+    <edge source="com.opitzconsulting.fluentdomainfactorydemo.domain.Studium" target="com.opitzconsulting.fluentdomainfactorydemo.domain.Student" relationship="TO_ONE">
+      <point x="0.0" y="-82.0" />
+      <point x="0.0" y="49.0" />
+    </edge>
+    <edge source="com.opitzconsulting.fluentdomainfactorydemo.domain.Universitaet" target="com.opitzconsulting.fluentdomainfactorydemo.domain.Fakultaet" relationship="TO_MANY">
+      <point x="99.99972474491858" y="2.974749836610613E-4" />
+      <point x="-634.4997247449186" y="-56.858" />
+      <point x="23.538724744918568" y="-49.35530661123343" />
+    </edge>
+    <edge source="com.opitzconsulting.fluentdomainfactorydemo.domain.Studiengang" target="com.opitzconsulting.fluentdomainfactorydemo.domain.Fakultaet" relationship="TO_ONE">
+      <point x="25.53817423475573" y="-39.88371115464457" />
+      <point x="-632.5" y="209.0" />
+      <point x="23.53844948983715" y="47.64469338876657" />
+    </edge>
+    <edge source="com.opitzconsulting.fluentdomainfactorydemo.domain.Fakultaet" target="com.opitzconsulting.fluentdomainfactorydemo.domain.Studiengang" relationship="TO_MANY">
+      <point x="-58.46155051016285" y="47.64469338876657" />
+      <point x="-716.5" y="252.619508882939" />
+      <point x="-716.0384494898371" y="252.619508882939" />
+      <point x="-58.00027525508142" y="-38.0" />
+    </edge>
+    <edge source="com.opitzconsulting.fluentdomainfactorydemo.domain.Fakultaet" target="com.opitzconsulting.fluentdomainfactorydemo.domain.Universitaet" relationship="TO_ONE">
+      <point x="-84.46127525508143" y="-49.35530661123343" />
+      <point x="-742.4997247449186" y="-21.0" />
+      <point x="-66.46127525508143" y="35.85829747498366" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.0" showDependencies="true" x="-431.5" y="351.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

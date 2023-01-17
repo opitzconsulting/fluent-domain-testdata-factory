@@ -28,7 +28,7 @@ public class StudiengangContext extends AbstractContext<Studiengang, Fakultaet> 
         Studium studium = defaultBuilder.build();
         studium.setStudiengang(studiengang);
 
-        testdataFactory.getStudiumStage().addContext(new StudiumContext(testdataFactory, this, studium));
+        testdataFactory.getStudiumState().addContext(new StudiumContext(testdataFactory, this, studium));
 
 
         return this;

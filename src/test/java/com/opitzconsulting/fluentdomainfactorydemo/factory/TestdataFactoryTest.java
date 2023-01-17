@@ -77,23 +77,73 @@ class TestdataFactoryTest {
     }
 
     @Test
-    void addStudiengang() {
-        factory.addStudiengang();
-        factory.addStudiengang();
+    void addStudiengangCreatesDefaultNames() {
+        Studiengang studiengang1 = factory.addStudiengang().getEntity();
+        Studiengang studiengang2 = factory.addStudiengang().getEntity();
 
-        List<Fakultaet> actualFacultaetList = factory.getFakultaetState().getAllEntities();
-        assertThat(actualFacultaetList).hasSize(1);
-
-        Fakultaet fakultaet = actualFacultaetList.get(0);
-        assertThat(fakultaet.getName()).isEqualTo("Fakultät 1");
-        assertThat(fakultaet.getUniversitaet().getName()).isEqualTo("Universität 1");
-
-        assertThat(factory.getUniversitaetState().getAllEntities())
-                .extracting(Universitaet::getName).containsExactly("Universität 1");
-
+        assertThat(studiengang1.getBezeichnung()).isEqualTo("Studiengang 1");
+        assertThat(studiengang2.getBezeichnung()).isEqualTo("Studiengang 2");
     }
 
+    @Test
+    void addStudiengangDependenciesAreCreated() {
+        Studiengang studiengang = factory.addStudiengang().getEntity();
 
+
+        assertThat(studiengang.getFakultaet())
+                .as("Fakultät wurde automatisch erstellt")
+                .isNotNull()
+                //
+                .extracting(Fakultaet::getName)
+                .as("Fakulät hat default - Name")
+                .isEqualTo("Fakultät 1");
+
+        assertThat(studiengang.getFakultaet().getUniversitaet())
+                .as("Universität wurde automatisch erstellt")
+                .isNotNull()
+                //
+                .extracting(Universitaet::getName)
+                .as("Universität hat default - Name")
+                .isEqualTo("Universität 1");
+    }
+
+    @Test
+    void addStudiengangUsesCurrentFakultaet() {
+        factory.addStudiengang();
+        factory.addFakultaet(f -> f.withName("Meine Fakultät"));
+        factory.addStudiengang();
+
+        Studiengang studiengang1 = factory.getStudiengangState().getAllEntities().get(0);
+        assertThat(studiengang1.getFakultaet().getName())
+                .as("Fakultät hat default - Name")
+                .isEqualTo("Fakultät 1");
+
+        Studiengang studiengang2 = factory.getStudiengangState().getAllEntities().get(1);
+        assertThat(studiengang2.getFakultaet().getName())
+                .as("Zuletzt erstellten Fakultät wurde verwendet")
+                .isEqualTo("Meine Fakultät");
+    }
+
+    @Test
+    void addUniversitaetResetsContexts() {
+        Studiengang studiengang1 = factory.addStudiengang().getEntity();
+
+        assertThat(studiengang1.getFakultaet().getName())
+                .isEqualTo("Fakultät 1");
+        assertThat(studiengang1.getFakultaet().getUniversitaet().getName())
+                .isEqualTo("Universität 1");
+
+        factory.addUniversitaet(u -> u.withName("Hamburg"));
+        Studiengang studiengang2 = factory.addStudiengang().getEntity();
+
+        assertThat(studiengang2.getFakultaet().getName())
+                .as("addUniversitaet() followed by addStudiengang() implicitly creates new Fakultaet")
+                .isEqualTo("Fakultät 2");
+        assertThat(studiengang2.getFakultaet().getUniversitaet().getName())
+                .as("new Fakultät should be added to recently created Universität")
+                .isEqualTo("Hamburg");
+
+    }
 
     @Test
     void addStudiumUsedCurrentStudent() {

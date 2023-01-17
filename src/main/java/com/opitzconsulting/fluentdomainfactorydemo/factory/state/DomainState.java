@@ -66,5 +66,8 @@ public abstract class DomainState<C extends AbstractContext<E, ?>, E> {
                 .findFirst();
     }
 
+    public void resetCurrentState() {
+        currentContext = null;
+    }
 
 }

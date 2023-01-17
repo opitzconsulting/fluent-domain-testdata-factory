@@ -20,7 +20,7 @@ public class TestdataFactory {
     FakultaetState fakultaetState = new FakultaetState();
     StudiengangState studiengangState = new StudiengangState();
     StudentState studentState = new StudentState();
-    StudiumState studiumStage = new StudiumState();
+    StudiumState studiumState = new StudiumState();
 
     // Universität
     private UniversitaetContext getCurrentUniversitaet() {
@@ -35,6 +35,7 @@ public class TestdataFactory {
         UniversitaetBuilder defaultBuilder = defaultUniversitaetBuilder();
         configurator.accept(defaultBuilder);
         UniversitaetContext universitaetContext = new UniversitaetContext(this, defaultBuilder.build());
+        fakultaetState.resetCurrentState();
         return universitaetState.addContext(universitaetContext);
     }
 
@@ -66,6 +67,7 @@ public class TestdataFactory {
         Universitaet universitaet = universitaetContext.getEntity();
         universitaet.addFakultaet(fakultaet);
         fakultaet.setUniversitaet(universitaet);
+        studiengangState.resetCurrentState();
         return new FakultaetContext(this, universitaetContext, fakultaet);
     }
 
@@ -91,6 +93,7 @@ public class TestdataFactory {
                 = fakultaetState.findContext(studiengang.getFakultaet())
                 .orElseGet(this::getCurrentFakultaet);
         studiengang.setFakultaet(fakultaetContext.getEntity());
+        studiumState.resetCurrentState();
         return new StudiengangContext(this, fakultaetContext, studiengang);
     }
 
@@ -179,7 +182,7 @@ public class TestdataFactory {
         return studentState;
     }
 
-    public StudiumState getStudiumStage() {
-        return studiumStage;
+    public StudiumState getStudiumState() {
+        return studiumState;
     }
 }

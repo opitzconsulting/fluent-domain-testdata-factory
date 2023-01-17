@@ -12,7 +12,7 @@ public class Fakultaet {
 
     private String name;
     private Universitaet universitaet;
-    private List<Studiengang> studiengangList = new ArrayList<>();
+    private final List<Studiengang> studiengangList = new ArrayList<>();
 
     public String getName() {
         return name;

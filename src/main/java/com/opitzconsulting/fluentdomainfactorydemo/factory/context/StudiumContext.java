@@ -9,6 +9,6 @@ public class StudiumContext extends AbstractContext<Studium, Studiengang> {
     public StudiumContext(TestdataFactory testdataFactory,
                           AbstractContext<Studiengang, ?> parentContext, Studium entity) {
         super(testdataFactory, parentContext, entity);
-        testdataFactory.getStudiumStage().addContext(this);
+        testdataFactory.getStudiumState().addContext(this);
     }
 }

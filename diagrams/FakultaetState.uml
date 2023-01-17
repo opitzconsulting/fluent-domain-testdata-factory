@@ -3,46 +3,55 @@
   <ID>JAVA</ID>
   <OriginalElement>com.opitzconsulting.fluentdomainfactorydemo.factory.state.FakultaetState</OriginalElement>
   <nodes>
+    <node x="221.0" y="238.0">com.opitzconsulting.fluentdomainfactorydemo.factory.state.StudentState</node>
+    <node x="9.0" y="123.5">com.opitzconsulting.fluentdomainfactorydemo.factory.state.FakultaetState</node>
     <node x="0.0" y="218.0">com.opitzconsulting.fluentdomainfactorydemo.factory.state.UniversitaetState</node>
-    <node x="697.0" y="218.0">com.opitzconsulting.fluentdomainfactorydemo.factory.state.StudiumState</node>
-    <node x="531.0" y="218.0">com.opitzconsulting.fluentdomainfactorydemo.factory.state.FakultaetState</node>
-    <node x="341.0" y="218.0">com.opitzconsulting.fluentdomainfactorydemo.factory.state.StudiengangState</node>
-    <node x="341.5" y="0.0">com.opitzconsulting.fluentdomainfactorydemo.factory.state.DomainState</node>
-    <node x="184.0" y="218.0">com.opitzconsulting.fluentdomainfactorydemo.factory.state.StudentState</node>
+    <node x="314.5" y="-152.0">com.opitzconsulting.fluentdomainfactorydemo.factory.state.DomainState</node>
+    <node x="835.0" y="218.0">com.opitzconsulting.fluentdomainfactorydemo.factory.state.StudiumState</node>
+    <node x="493.0" y="271.0">com.opitzconsulting.fluentdomainfactorydemo.factory.state.StudiengangState</node>
   </nodes>
   <notes />
   <edges>
     <edge source="com.opitzconsulting.fluentdomainfactorydemo.factory.state.FakultaetState" target="com.opitzconsulting.fluentdomainfactorydemo.factory.state.DomainState" relationship="GENERALIZATION">
-      <point x="0.0" y="-15.5" />
-      <point x="604.0" y="193.0" />
-      <point x="426.0" y="193.0" />
-      <point x="0.0" y="84.0" />
+      <point x="71.0" y="-0.0" />
+      <point x="246.25" y="138.0" />
+      <point x="246.25" y="-14.0" />
+      <point x="-117.5" y="-0.0" />
     </edge>
     <edge source="com.opitzconsulting.fluentdomainfactorydemo.factory.state.StudiengangState" target="com.opitzconsulting.fluentdomainfactorydemo.factory.state.DomainState" relationship="GENERALIZATION">
       <point x="0.0" y="-15.5" />
+      <point x="441.5" y="270.0" />
+      <point x="441.5" y="70.0" />
       <point x="0.0" y="84.0" />
     </edge>
     <edge source="com.opitzconsulting.fluentdomainfactorydemo.factory.state.StudentState" target="com.opitzconsulting.fluentdomainfactorydemo.factory.state.DomainState" relationship="GENERALIZATION">
       <point x="0.0" y="-15.5" />
-      <point x="252.5" y="193.0" />
-      <point x="426.0" y="193.0" />
+      <point x="287.5" y="193.0" />
+      <point x="432.0" y="193.0" />
       <point x="0.0" y="84.0" />
     </edge>
     <edge source="com.opitzconsulting.fluentdomainfactorydemo.factory.state.UniversitaetState" target="com.opitzconsulting.fluentdomainfactorydemo.factory.state.DomainState" relationship="GENERALIZATION">
       <point x="0.0" y="-15.5" />
-      <point x="82.0" y="193.0" />
-      <point x="426.0" y="193.0" />
+      <point x="80.0" y="193.0" />
+      <point x="432.0" y="193.0" />
       <point x="0.0" y="84.0" />
     </edge>
     <edge source="com.opitzconsulting.fluentdomainfactorydemo.factory.state.StudiumState" target="com.opitzconsulting.fluentdomainfactorydemo.factory.state.DomainState" relationship="GENERALIZATION">
       <point x="0.0" y="-15.5" />
-      <point x="767.5" y="193.0" />
-      <point x="426.0" y="193.0" />
+      <point x="903.5" y="193.0" />
+      <point x="432.0" y="193.0" />
       <point x="0.0" y="84.0" />
     </edge>
   </edges>
-  <settings layout="Hierarchic" zoom="1.0" showDependencies="false" x="419.0" y="124.5" />
-  <SelectedNodes />
+  <settings layout="Hierarchic" zoom="1.0" showDependencies="false" x="694.0" y="144.5" />
+  <SelectedNodes>
+    <node>com.opitzconsulting.fluentdomainfactorydemo.factory.state.UniversitaetState</node>
+    <node>com.opitzconsulting.fluentdomainfactorydemo.factory.state.StudiumState</node>
+    <node>com.opitzconsulting.fluentdomainfactorydemo.factory.state.FakultaetState</node>
+    <node>com.opitzconsulting.fluentdomainfactorydemo.factory.state.DomainState</node>
+    <node>com.opitzconsulting.fluentdomainfactorydemo.factory.state.StudiengangState</node>
+    <node>com.opitzconsulting.fluentdomainfactorydemo.factory.state.StudentState</node>
+  </SelectedNodes>
   <Categories>
     <Category>Fields</Category>
     <Category>Methods</Category>
